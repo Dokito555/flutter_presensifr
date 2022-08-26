@@ -6,3 +6,10 @@ class ColorPalette {
   static const underlineTextField = Color(0xff8b97ff);
   static const hintColor = Color(0xffccd1ff);
 }
+
+class PageRoutes {
+  static const loginRoute = '/';
+  static const signupRoute = '/signup';
+  static const lobbyRoute = '/lobby';
+  static const historyRoute = '/history';
+}

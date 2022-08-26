@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:presensifr/constants.dart';
+import 'package:presensifr/constants/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:presensifr/server.dart';
 
@@ -82,6 +82,7 @@ class _LoginFormState extends State<LoginPage> {
     return Column(
       children: [
         const Padding(padding: EdgeInsets.only(top: 16.0)),
+        // Username
         TextFormField(
           decoration: const InputDecoration(
               border: UnderlineInputBorder(),
@@ -109,18 +110,19 @@ class _LoginFormState extends State<LoginPage> {
             formData["username"] = value;
           },
         ),
+        // Password
         TextFormField(
           decoration: InputDecoration(
             border: UnderlineInputBorder(),
-            enabledBorder: UnderlineInputBorder(
+            enabledBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(
                     color: ColorPalette.underlineTextField, width: 1.5)),
-            focusedBorder: UnderlineInputBorder(
+            focusedBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(color: Colors.white, width: 3.0)),
             hintText: "Masukkan Password",
             labelText: "Password",
-            labelStyle: TextStyle(color: Colors.white),
-            hintStyle: TextStyle(color: ColorPalette.hintColor),
+            labelStyle: const TextStyle(color: Colors.white),
+            hintStyle: const TextStyle(color: ColorPalette.hintColor),
             suffixIcon: GestureDetector(
               onTap: () {
                 _togglePasswordVisibility();
@@ -158,7 +160,7 @@ class _LoginFormState extends State<LoginPage> {
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 8.0),
               width: double.infinity,
-              child: Text(
+              child: const Text(
                 "Login",
                 style: TextStyle(color: ColorPalette.primaryColor),
                 textAlign: TextAlign.center,
@@ -202,7 +204,29 @@ class _LoginFormState extends State<LoginPage> {
                 ScaffoldMessenger.of(mContext).showSnackBar(
                     SnackBar(content: Text("Data Tidak Berhasil Login")));
               }
-            })
+            }),
+
+            const SizedBox(
+              height: 20,
+            ),
+
+            InkWell(
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                width: double.infinity,
+                child: const Text(
+                  'Sign Up',
+                  textAlign: TextAlign.center,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30.0)
+                ),
+              ),
+              onTap: () {
+                Navigator.pushNamed(context, PageRoutes.signupRoute);
+              },
+            )
       ],
     );
   }
