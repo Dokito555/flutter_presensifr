@@ -1,31 +1,52 @@
-// To parse this JSON data, do
-//
-//     final empty = emptyFromJson(jsonString);
-
 import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:presensifr/server.dart';
 
-Empty emptyFromJson(String str) => Empty.fromJson(json.decode(str));
 
-String emptyToJson(Empty data) => json.encode(data.toJson());
-
-class Empty {
-    Empty({
-        required this.errCode,
-        required this.data,
+class LoginResponse {
+    LoginResponse({
+        this.errCode,
+        this.data,
     });
 
-    int errCode;
-    Data data;
+    int? errCode;
+    Data? data;
 
-    factory Empty.fromJson(Map<String, dynamic> json) => Empty(
+    factory LoginResponse.fromRawJson(String str) => LoginResponse.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
+
+    factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
         errCode: json["err_code"],
         data: Data.fromJson(json["data"]),
     );
 
     Map<String, dynamic> toJson() => {
         "err_code": errCode,
-        "data": data.toJson(),
+        "data": data!.toJson(),
     };
+
+    static Future<LoginResponse> connectLogin(String email, String password) async {
+
+      var responseResult = await http.post(
+        Uri.parse(APIServer.urlLogin),
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: {
+          "email" : email,
+          "password" : password,
+          "tenant" : "grit"
+        }
+      );
+
+      final data = json.decode(responseResult.body);
+
+      return LoginResponse(
+        errCode: data["errCode"], 
+        data: Data.fromJson(data["data"])
+      );
+    }
 }
 
 class Data {
@@ -36,6 +57,10 @@ class Data {
 
     String message;
     Result result;
+
+    factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
         message: json["message"],
@@ -64,6 +89,10 @@ class Result {
     String nip;
     int role;
     String tenantName;
+
+    factory Result.fromRawJson(String str) => Result.fromJson(json.decode(str));
+
+    String toRawJson() => json.encode(toJson());
 
     factory Result.fromJson(Map<String, dynamic> json) => Result(
         idFrUser: json["id_fr_user"],

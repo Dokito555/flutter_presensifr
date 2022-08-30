@@ -3,10 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:presensifr/data/model/login_response_model.dart';
 import 'package:presensifr/server.dart';
 
 final GlobalKey<FormState> _addPointKey = GlobalKey<FormState>();
-Map<String, dynamic> formData = {"username": null, "password": null};
+Map<String, dynamic> formData = {"email": null, "password": null};
 var mContext;
 
 class LoginPage extends StatefulWidget {
@@ -16,6 +17,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginFormState extends State<LoginPage> {
   bool _isHidePassword = true;
+
+  LoginResponse loginResponse = LoginResponse();
 
   void _togglePasswordVisibility() {
     setState(() {
@@ -91,23 +94,23 @@ class _LoginFormState extends State<LoginPage> {
                       color: ColorPalette.underlineTextField, width: 1.5)),
               focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.white, width: 3.0)),
-              hintText: "Masukkan Username",
-              labelText: "Username",
+              hintText: "Masukkan Email",
+              labelText: "Email",
               labelStyle: TextStyle(color: Colors.white),
               hintStyle: TextStyle(color: ColorPalette.hintColor)),
           style: const TextStyle(color: Colors.white),
           autofocus: false,
           validator: (value) {
             if (value!.isEmpty) {
-              return "Username harus diisi";
+              return "Email harus diisi";
             }
             return null;
           },
           onChanged: (String value) {
-            formData["username"] = value;
+            formData["email"] = value;
           },
           onSaved: (String? value) {
-            formData["username"] = value;
+            formData["email"] = value;
           },
         ),
         // Password
@@ -174,35 +177,59 @@ class _LoginFormState extends State<LoginPage> {
                 return;
               }
 
-              String username = formData.values.elementAt(0).toString();
+              String email = formData.values.elementAt(0).toString();
               String password = formData.values.elementAt(1).toString();
               const tenant = 'grit';
 
-              final urlLogin = Uri.parse(APIServer.urlLogin);
-              final response = await http.post(
-                urlLogin,
-                headers: <String, String>{
-                  'Content-Type': 'application/json',
-                },
-                body: jsonEncode(<String, String>{
-                  'email': username,
-                  'password': password,
-                  'tenant': tenant
-                }),
+              // final urlLogin = Uri.parse(APIServer.urlLogin);
+              // final response = await http.post(
+              //   urlLogin,
+              //   headers: <String, String>{
+              //     'Content-Type': 'application/json',
+              //   },
+              //   body: jsonEncode(<String, String>{
+              //     'email': email,
+              //     'password': password,
+              //     'tenant': tenant
+              //   }),
+              // );
+
+              // print('Response request: ${response.request}');
+              // print('Response status: ${response.statusCode}');
+              // print('Response body: ${response.body}');
+
+              // final resp = json.decode(response.body);
+              // var err_code = resp["err_code"];
+              // if (err_code == 0) {
+              //   ScaffoldMessenger.of(mContext).showSnackBar(
+              //       SnackBar(content: Text("Data Berhasil Login")
+              //     )
+              //   );
+              //   Navigator.pushNamed(mContext, PageRoutes.signupRoute);
+              // } else {
+              //   ScaffoldMessenger.of(mContext).showSnackBar(
+              //       SnackBar(content: Text("Data Tidak Berhasil Login")));
+              // }
+
+              LoginResponse.connectLogin(email, password).then(
+                (value) {
+                  setState(() {
+                    loginResponse = value;
+                  });
+                }
               );
-
-              print('Response request: ${response.request}');
-              print('Response status: ${response.statusCode}');
-              print('Response body: ${response.body}');
-
-              final resp = json.decode(response.body);
-              var err_code = resp["err_code"];
-              if (err_code == 0) {
+              print(loginResponse.data);
+              if (loginResponse.errCode == 0) {
+                print(loginResponse.errCode);
                 ScaffoldMessenger.of(mContext).showSnackBar(
-                    SnackBar(content: Text("Data Berhasil Login")));
+                  const SnackBar(content: Text("Berhasil Login"))
+                );
+                Navigator.pushNamed(mContext, PageRoutes.signupRoute, arguments: loginResponse.data);
               } else {
+                print(loginResponse.errCode);
                 ScaffoldMessenger.of(mContext).showSnackBar(
-                    SnackBar(content: Text("Data Tidak Berhasil Login")));
+                  const SnackBar(content: Text("Tidak Berhasil Login"))
+                );
               }
             }),
 
