@@ -26,27 +26,27 @@ class LoginResponse {
         "data": data!.toJson(),
     };
 
-    static Future<LoginResponse> connectLogin(String email, String password) async {
+    // static Future<LoginResponse> connectLogin(String email, String password) async {
 
-      var responseResult = await http.post(
-        Uri.parse(APIServer.urlLogin),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(<String, String>{
-          "email" : email,
-          "password" : password,
-          "tenant" : "grit"
-        })
-      );
+    //   var responseResult = await http.post(
+    //     Uri.parse(APIServer.urlLogin),
+    //     headers: <String, String>{
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: jsonEncode(<String, String>{
+    //       "email" : email,
+    //       "password" : password,
+    //       "tenant" : "grit"
+    //     })
+    //   );
 
-      final data = json.decode(responseResult.body);
+    //   final data = json.decode(responseResult.body);
 
-      return LoginResponse(
-        errCode: data["errCode"], 
-        data: Data.fromJson(data["data"])
-      );
-    }
+    //   return LoginResponse(
+    //     errCode: data["errCode"], 
+    //     data: Data.fromJson(data["data"])
+    //   );
+    // }
 }
 
 class Data {

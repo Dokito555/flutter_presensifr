@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:http/http.dart' as http;
+import 'package:presensifr/data/api/login_service.dart';
 import 'package:presensifr/data/model/login_response_model.dart';
 import 'package:presensifr/server.dart';
 
@@ -211,26 +212,29 @@ class _LoginFormState extends State<LoginPage> {
               //       SnackBar(content: Text("Data Tidak Berhasil Login")));
               // }
 
-              LoginResponse.connectLogin(email, password).then(
-                (value) {
-                  setState(() {
-                    loginResponse = value;
-                  });
-                }
-              );
-              print(loginResponse.data);
-              if (loginResponse.errCode == 0) {
-                print(loginResponse.errCode);
-                ScaffoldMessenger.of(mContext).showSnackBar(
-                  const SnackBar(content: Text("Berhasil Login"))
-                );
-                Navigator.pushNamed(mContext, PageRoutes.signupRoute, arguments: loginResponse.data);
-              } else {
-                print(loginResponse.errCode);
-                ScaffoldMessenger.of(mContext).showSnackBar(
-                  const SnackBar(content: Text("Tidak Berhasil Login"))
-                );
+            ApiService.connectLogin(email, password).then(
+              (value) {
+                setState(() {
+                  loginResponse = value;
+                });
               }
+            );
+
+            if (loginResponse.errCode == 0) {
+              print(loginResponse.errCode);
+              print(loginResponse.data!.message);
+              ScaffoldMessenger.of(mContext).showSnackBar(
+                const SnackBar(content: Text('Berhasil Login'))
+              );
+              Navigator.pushNamed(context, PageRoutes.signupRoute, arguments: loginResponse.data);
+            } else {
+              print(loginResponse.errCode);
+              print(loginResponse.data!.message);
+              ScaffoldMessenger.of(mContext).showSnackBar(
+                const SnackBar(content: Text('Gagal Login'))
+              );
+            }
+            
             }),
 
             const SizedBox(

@@ -6,4 +6,6 @@ enum Status {
   authenticating,
   registering,
   loggedOut,
+  error,
+  loading
 }
