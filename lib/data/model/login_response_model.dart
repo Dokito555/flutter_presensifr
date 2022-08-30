@@ -33,11 +33,11 @@ class LoginResponse {
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
-        body: {
+        body: jsonEncode(<String, String>{
           "email" : email,
           "password" : password,
           "tenant" : "grit"
-        }
+        })
       );
 
       final data = json.decode(responseResult.body);
