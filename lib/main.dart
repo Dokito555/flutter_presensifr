@@ -23,7 +23,7 @@ class App extends StatelessWidget {
       initialRoute: PageRoutes.loginRoute,
       routes: {
         PageRoutes.loginRoute: (context) => LoginPage(),
-        PageRoutes.signupRoute: (context) => SignupPage()
+        PageRoutes.signupRoute: (context) => SignupPage(),
       },
     );
   }

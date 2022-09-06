@@ -7,5 +7,6 @@ enum Status {
   registering,
   loggedOut,
   error,
-  loading
+  loading,
+  success
 }

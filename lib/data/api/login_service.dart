@@ -8,6 +8,7 @@ class ApiService {
 
   static Future<LoginResponse> connectLogin(String email, String password) async {
 
+    const tenant = "grit";
     final url = Uri.parse(APIServer.urlLogin);
     final response = await http.post(
       url,
@@ -17,9 +18,14 @@ class ApiService {
       body: jsonEncode(<String, String>{
         "email" : email,
         "password" : password,
-        "tenant" : "grit"
+        "tenant" : tenant
       })
     );
+
+    // print('Response req : ${response.request}');
+    // print('Response status : ${response.statusCode}');
+    // print('Response body : ${response.body}');
+
     final data = json.decode(response.body);
 
     if (response.statusCode == 200) {

@@ -7,6 +7,8 @@ import 'package:presensifr/data/api/login_service.dart';
 import 'package:presensifr/data/model/login_response_model.dart';
 import 'package:presensifr/server.dart';
 
+import '../widgets/email_verification.dart';
+
 final GlobalKey<FormState> _addPointKey = GlobalKey<FormState>();
 Map<String, dynamic> formData = {"email": null, "password": null};
 var mContext;
@@ -44,7 +46,7 @@ class _LoginFormState extends State<LoginPage> {
                     _iconLogin(),
                     _titleDescription(),
                     _formLogin(),
-                    _buildButton()
+                    _buildButton(context)
                   ],
                 ),
               )
@@ -156,22 +158,22 @@ class _LoginFormState extends State<LoginPage> {
     );
   }
 
-  Widget _buildButton() {
+  Widget _buildButton(BuildContext context) {
     return Column(
       children: [
-        Padding(padding: EdgeInsets.only(top: 16.0)),
+        const Padding(padding: EdgeInsets.only(top: 40.0)),
         InkWell(
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 8.0),
-              width: double.infinity,
-              child: const Text(
-                "Login",
-                style: TextStyle(color: ColorPalette.primaryColor),
-                textAlign: TextAlign.center,
-              ),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30.0)),
+          child: Container(
+            padding: const EdgeInsets.all(9.0),
+            width: double.infinity,
+            child: const Text(
+              "Login",
+              style: TextStyle(color: ColorPalette.primaryColor),
+              textAlign: TextAlign.center,
+            ),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30.0)),
             ),
             onTap: () async {
               if (!_addPointKey.currentState!.validate()) {
@@ -212,41 +214,44 @@ class _LoginFormState extends State<LoginPage> {
               //       SnackBar(content: Text("Data Tidak Berhasil Login")));
               // }
 
-            ApiService.connectLogin(email, password).then(
-              (value) {
-                setState(() {
-                  loginResponse = value;
-                });
-              }
-            );
+              ApiService.connectLogin(email, password).then(
+                (value) {
+                  setState(() {
+                    loginResponse = value;
+                  });
+                }
+              );
 
-            if (loginResponse.errCode == 0) {
-              print(loginResponse.errCode);
-              print(loginResponse.data!.message);
-              ScaffoldMessenger.of(mContext).showSnackBar(
-                const SnackBar(content: Text('Berhasil Login'))
-              );
-              Navigator.pushNamed(context, PageRoutes.signupRoute, arguments: loginResponse.data);
-            } else {
-              print(loginResponse.errCode);
-              print(loginResponse.data!.message);
-              ScaffoldMessenger.of(mContext).showSnackBar(
-                const SnackBar(content: Text('Gagal Login'))
-              );
-            }
+              if (loginResponse.errCode == 0 && loginResponse.data!.message == "Success") {
+                // print(loginResponse.errCode);
+                // print(loginResponse.data!.message);
+                print(loginResponse.data!.message);
+                ScaffoldMessenger.of(mContext).showSnackBar(
+                  const SnackBar(content: Text('Berhasil Login'))
+                );
+                Navigator.pushNamed(context, PageRoutes.signupRoute, arguments: loginResponse.data);
+              } else if (loginResponse.errCode == 1) {
+                // print(loginResponse.errCode);
+                // print(loginResponse.data!.message);
+                print(loginResponse.data!.message);
+                ScaffoldMessenger.of(mContext).showSnackBar(
+                  const SnackBar(content: Text('Gagal Login'))
+                );
+              }
             
             }),
 
             const SizedBox(
-              height: 20,
+              height: 24,
             ),
 
             InkWell(
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
+                padding: const EdgeInsets.all(9.0),
                 width: double.infinity,
                 child: const Text(
                   'Sign Up',
+                  style: TextStyle(color: ColorPalette.primaryColor),
                   textAlign: TextAlign.center,
                 ),
                 decoration: BoxDecoration(
@@ -256,6 +261,28 @@ class _LoginFormState extends State<LoginPage> {
               ),
               onTap: () {
                 Navigator.pushNamed(context, PageRoutes.signupRoute);
+              },
+            ),
+
+            const SizedBox(
+              height: 20,
+            ),
+
+            TextButton(
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                width: double.infinity,
+                child: const Text(
+                  'Forgot Password?',
+                  style: TextStyle(color: ColorPalette.whiteColor),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              onPressed: () => {
+                showModalBottomSheet(
+                  context: context, 
+                  builder: (context) => BuildSheet()
+                )
               },
             )
       ],
