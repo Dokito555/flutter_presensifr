@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:http/http.dart' as http;
-import 'package:presensifr/data/api/login_service.dart';
+import 'package:presensifr/data/api/api_service.dart';
 import 'package:presensifr/data/model/login_response_model.dart';
 import 'package:presensifr/server.dart';
 
@@ -229,7 +229,7 @@ class _LoginFormState extends State<LoginPage> {
                 ScaffoldMessenger.of(mContext).showSnackBar(
                   const SnackBar(content: Text('Berhasil Login'))
                 );
-                Navigator.pushNamed(context, PageRoutes.signupRoute, arguments: loginResponse.data);
+                Navigator.pushNamed(context, PageRoutes.signupRoute);
               } else if (loginResponse.errCode == 1) {
                 // print(loginResponse.errCode);
                 // print(loginResponse.data!.message);

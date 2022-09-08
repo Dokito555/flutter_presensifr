@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:presensifr/constants/constants.dart';
+import 'package:presensifr/data/api/api_service.dart';
+import 'package:presensifr/data/model/email_ver_response_model.dart';
+import 'package:presensifr/screens/login_view.dart';
 
 class BuildSheet extends StatefulWidget {
   BuildSheet({Key? key}) : super(key: key);
@@ -12,25 +15,31 @@ final GlobalKey<FormState> _addPointKey = GlobalKey<FormState>();
 Map<String, dynamic> emaildata = {"email" : null};
 
 class _BuildSheetState extends State<BuildSheet> {
+
+  EmailVerResponse emailVerResponse = EmailVerResponse();
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
         color: ColorPalette.secondaryColor
       ),
-      child: ListView(
-        children: [
-          Center(
-            child: Column(
-              children: [
-                _closeIcon(context),
-                _emailForm(),
-                // _buildButton()
-              ],
-            ),
-          )
-        ],
-      ),
+      child: Form(
+        key: _addPointKey,
+        child: ListView(
+          children: [
+            Center(
+              child: Column(
+                children: [
+                  _closeIcon(context),
+                  _emailForm(),
+                  _buildButton(context)
+                ],
+              ),
+            )
+          ],
+        ),
+      )
     );
   }
 
@@ -61,20 +70,20 @@ class _BuildSheetState extends State<BuildSheet> {
           border: UnderlineInputBorder(),
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(
-              color: ColorPalette.underlineTextField, width: 1.5
+              color: ColorPalette.greyColor, width: 1.5
             )
           ),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.white, width: 3.0
+              color: Colors.black, width: 1.0
             )
           ),
           hintText: "Masukkan Email",
           labelText: "Email",
-          labelStyle: TextStyle(color: Colors.white),
-          hintStyle: TextStyle(color: ColorPalette.hintColor)
+          labelStyle: TextStyle(color: Colors.black),
+          hintStyle: TextStyle(color: ColorPalette.greyColor)
         ),
-        style: const TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.black),
         autofocus: false,
         validator: (value) {
           if (value!.isEmpty) {
@@ -92,7 +101,54 @@ class _BuildSheetState extends State<BuildSheet> {
     );
   }
 
-  Widget _buildButton() {
-    return InkWell();
+  Widget _buildButton(BuildContext context) {
+    return InkWell(
+      child: Container(
+        padding: const EdgeInsets.all(9.0),
+        margin: const EdgeInsets.symmetric(horizontal: 40),
+        width: double.infinity,
+        height: 50,
+        child: const Center(
+          child: Text(
+            'Send Code',
+            style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        decoration: BoxDecoration(
+          color: ColorPalette.primaryColor,
+          borderRadius: BorderRadius.circular(10.0)
+        ),
+      ),
+      onTap: () async {
+        if (!_addPointKey.currentState!.validate()) {
+          return;
+        }
+
+        String email = emaildata.values.elementAt(0).toString();
+
+        ApiService.verEmail(email).then(
+          (value) {
+            setState(() {
+              emailVerResponse = value;
+            });
+          }
+        );
+
+        if (emailVerResponse.errCode != 0) {
+          print(emailVerResponse.data!.result);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Gagal Kirim'))
+          );
+        } else {
+          print(emailVerResponse.data!.result);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Kode Berhasil Terkirim'))
+          );
+          Navigator.pushNamed(context, PageRoutes.signupRoute);
+        }
+        
+      },
+    );
   }
 }
