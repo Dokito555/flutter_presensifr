@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:presensifr/data/api/api_service.dart';
-import 'package:presensifr/data/model/email_ver_response_model.dart';
+import 'package:presensifr/data/model/response_model/email_ver_response_model.dart';
 import 'package:presensifr/screens/login_view.dart';
+import 'package:presensifr/widgets/code_verification.dart';
 
-class BuildSheet extends StatefulWidget {
-  BuildSheet({Key? key}) : super(key: key);
+class EmailVerificationSheet extends StatefulWidget {
+  EmailVerificationSheet({Key? key}) : super(key: key);
 
   @override
-  State<BuildSheet> createState() => _BuildSheetState();
+  State<EmailVerificationSheet> createState() => _EmailVerificationSheetState();
 }
 
 final GlobalKey<FormState> _addPointKey = GlobalKey<FormState>();
 Map<String, dynamic> emaildata = {"email" : null};
 
-class _BuildSheetState extends State<BuildSheet> {
+class _EmailVerificationSheetState extends State<EmailVerificationSheet> {
 
   EmailVerResponse emailVerResponse = EmailVerResponse();
 
@@ -127,27 +128,24 @@ class _BuildSheetState extends State<BuildSheet> {
 
         String email = emaildata.values.elementAt(0).toString();
 
-        ApiService.verEmail(email).then(
+        ApiService.emailVer(email).then(
           (value) {
             setState(() {
               emailVerResponse = value;
             });
+            if (emailVerResponse.errCode != 0) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Gagal Kirim'))
+              );
+            } else {
+              Navigator.pop(context);
+              Navigator.pushNamed(context, PageRoutes.codeVerificationRoute, arguments: emailVerResponse);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Kode Berhasil Terkirim'))
+              );
+            }
           }
         );
-
-        if (emailVerResponse.errCode != 0) {
-          print(emailVerResponse.data!.result);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Gagal Kirim'))
-          );
-        } else {
-          print(emailVerResponse.data!.result);
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Kode Berhasil Terkirim'))
-          );
-          Navigator.pushNamed(context, PageRoutes.signupRoute);
-        }
-        
       },
     );
   }

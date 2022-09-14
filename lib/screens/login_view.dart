@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:presensifr/data/api/api_service.dart';
-import 'package:presensifr/data/model/login_response_model.dart';
+import 'package:presensifr/data/model/response_model/login_response_model.dart';
 import 'package:presensifr/server.dart';
 
 import '../widgets/email_verification.dart';
@@ -219,26 +219,19 @@ class _LoginFormState extends State<LoginPage> {
                   setState(() {
                     loginResponse = value;
                   });
+                  if (loginResponse.errCode != 0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Gagal Login'))
+                  );
+                  print(loginResponse.errCode);
+                  } else {
+                    Navigator.pushNamed(context, PageRoutes.signupRoute);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Berhasil Login'))
+                    );
+                  }
                 }
               );
-
-              if (loginResponse.errCode == 0 && loginResponse.data!.message == "Success") {
-                // print(loginResponse.errCode);
-                // print(loginResponse.data!.message);
-                print(loginResponse.data!.message);
-                ScaffoldMessenger.of(mContext).showSnackBar(
-                  const SnackBar(content: Text('Berhasil Login'))
-                );
-                Navigator.pushNamed(context, PageRoutes.signupRoute);
-              } else if (loginResponse.errCode == 1) {
-                // print(loginResponse.errCode);
-                // print(loginResponse.data!.message);
-                print(loginResponse.data!.message);
-                ScaffoldMessenger.of(mContext).showSnackBar(
-                  const SnackBar(content: Text('Gagal Login'))
-                );
-              }
-            
             }),
 
             const SizedBox(
@@ -281,7 +274,7 @@ class _LoginFormState extends State<LoginPage> {
               onPressed: () => {
                 showModalBottomSheet(
                   context: context, 
-                  builder: (context) => BuildSheet()
+                  builder: (context) => EmailVerificationSheet()
                 )
               },
             )
