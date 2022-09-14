@@ -1,12 +1,7 @@
 enum Status {
-  notLoggedIn,
-  notRegistered,
-  loggedIn,
-  registered,
-  authenticating,
-  registering,
-  loggedOut,
   error,
   loading,
-  success
+  success,
+  connected,
+  failed
 }

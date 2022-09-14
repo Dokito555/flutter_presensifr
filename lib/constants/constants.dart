@@ -12,6 +12,7 @@ class ColorPalette {
 
 class PageRoutes {
   static const loginRoute = '/';
+  static const codeVerificationRoute = '/codever';
   static const signupRoute = '/signup';
   static const homeRoute = '/home';
   static const historyRoute = '/history';
