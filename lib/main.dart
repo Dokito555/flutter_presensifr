@@ -1,6 +1,6 @@
 //import 'dart:js';
 
-import 'dart:js';
+// import 'dart:js';
 
 import 'package:flutter/material.dart';
 import 'package:presensifr/constants/constants.dart';
@@ -22,6 +22,9 @@ class App extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'PresensiFR',
+      theme: ThemeData(
+        primaryColor: ColorPalette.primaryColor,
+      ),
       initialRoute: PageRoutes.loginRoute,
       routes: {
         PageRoutes.loginRoute: (context) => LoginPage(),
