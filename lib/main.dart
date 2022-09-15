@@ -4,13 +4,25 @@
 
 import 'package:flutter/material.dart';
 import 'package:presensifr/constants/constants.dart';
+import 'package:presensifr/data/api/api_service.dart';
+import 'package:presensifr/provider/login_provider.dart';
 import 'package:presensifr/screens/login_view.dart';
 import 'package:presensifr/screens/signup_view.dart';
 import 'package:presensifr/widgets/code_verification.dart';
 import 'package:presensifr/widgets/new_password.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const App());
+  runApp(
+    MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (_) => LoginProvider(apiService: ApiService()),
+      )
+    ],
+      child: const App(),
+    )
+  );
 }
 
 class App extends StatelessWidget {

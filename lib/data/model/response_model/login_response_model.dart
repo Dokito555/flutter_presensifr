@@ -6,8 +6,8 @@ import 'package:presensifr/server.dart';
 class LoginResponse {
 
     LoginResponse({
-        this.errCode,
-        this.data,
+      this.errCode,
+      this.data,
     });
 
     int? errCode;

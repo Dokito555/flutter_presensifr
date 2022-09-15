@@ -12,7 +12,7 @@ import 'package:presensifr/widgets/new_password.dart';
 
 class ApiService {
 
-  static Future<LoginResponse> connectLogin(String email, String password) async {
+  static Future<LoginResponse> connectLogin(LoginModel loginData) async {
 
     const tenant = "grit";
     final url = Uri.parse(APIServer.urlLogin);
@@ -22,11 +22,7 @@ class ApiService {
       headers: <String, String>{
         'Content-Type': 'application/json'
       },
-      body: jsonEncode(<String, String>{
-        "email" : email,
-        "password" : password,
-        "tenant" : tenant
-      })
+      body: jsonEncode(loginData.toJson())
     );
     
     final data = json.decode(response.body);
@@ -38,24 +34,24 @@ class ApiService {
     }
   }
 
-  static Future<http.Response?> login(LoginModel loginData) async {
+  // static Future<http.Response?> login(LoginModel loginData) async {
 
-    final url = Uri.parse(APIServer.urlLogin);
+  //   final url = Uri.parse(APIServer.urlLogin);
 
-    http.Response? response;
-    try {
-      response = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json'
-        },
-        body: jsonEncode(loginData.toJson())
-      );
-    } catch(e) {
-      log(e.toString());
-    }
+  //   http.Response? response;
+  //   try {
+  //     response = await http.post(
+  //       url,
+  //       headers: <String, String>{
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: jsonEncode(loginData.toJson())
+  //     );
+  //   } catch(e) {
+  //     log(e.toString());
+  //   }
 
-  }
+  // }
 
   static Future<EmailVerResponse> emailVer(String email) async {
     

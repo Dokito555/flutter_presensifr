@@ -3,5 +3,6 @@ enum Status {
   loading,
   success,
   connected,
-  failed
+  failed,
+  loggedIn,
 }

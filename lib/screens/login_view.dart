@@ -4,8 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:presensifr/data/api/api_service.dart';
+import 'package:presensifr/data/model/login_model.dart';
 import 'package:presensifr/data/model/response_model/login_response_model.dart';
+import 'package:presensifr/provider/login_provider.dart';
 import 'package:presensifr/server.dart';
+import 'package:presensifr/util/status_state.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/email_verification.dart';
 
@@ -31,7 +35,7 @@ class _LoginFormState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    mContext = context;
+
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -161,6 +165,34 @@ class _LoginFormState extends State<LoginPage> {
   }
 
   Widget _buildButton(BuildContext context) {
+
+    var loginProvider = Provider.of<LoginProvider>(context, listen: false);
+
+    Future<void> _login() async {
+
+      String email = formData.values.elementAt(0).toString();
+      String password = formData.values.elementAt(1).toString();
+
+      LoginModel loginData = LoginModel(
+        email: email, 
+        password: password
+      );
+
+      await loginProvider.postLogin(loginData);
+
+      if (loginProvider.status == Status.failed) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Gagal Login'))
+        );
+      } else if (loginProvider.status == Status.loggedIn) {
+        Navigator.pushNamed(context, PageRoutes.signupRoute);
+        ScaffoldMessenger.of(context).showSnackBar(
+           const SnackBar(content: Text('Berhasil Login'))
+        );
+      }
+
+    }
+
     return Column(
       children: [
         const Padding(padding: EdgeInsets.only(top: 40.0)),
@@ -181,59 +213,7 @@ class _LoginFormState extends State<LoginPage> {
               if (!_addPointKey.currentState!.validate()) {
                 return;
               }
-
-              String email = formData.values.elementAt(0).toString();
-              String password = formData.values.elementAt(1).toString();
-              // const tenant = 'grit';
-
-              // final urlLogin = Uri.parse(APIServer.urlLogin);
-              // final response = await http.post(
-              //   urlLogin,
-              //   headers: <String, String>{
-              //     'Content-Type': 'application/json',
-              //   },
-              //   body: jsonEncode(<String, String>{
-              //     'email': email,
-              //     'password': password,
-              //     'tenant': tenant
-              //   }),
-              // );
-
-              // print('Response request: ${response.request}');
-              // print('Response status: ${response.statusCode}');
-              // print('Response body: ${response.body}');
-
-              // final resp = json.decode(response.body);
-              // var err_code = resp["err_code"];
-              // if (err_code == 0) {
-              //   ScaffoldMessenger.of(mContext).showSnackBar(
-              //       SnackBar(content: Text("Data Berhasil Login")
-              //     )
-              //   );
-              //   Navigator.pushNamed(mContext, PageRoutes.signupRoute);
-              // } else {
-              //   ScaffoldMessenger.of(mContext).showSnackBar(
-              //       SnackBar(content: Text("Data Tidak Berhasil Login")));
-              // }
-
-              ApiService.connectLogin(email, password).then(
-                (value) {
-                  setState(() {
-                    loginResponse = value;
-                  });
-                  if (loginResponse.errCode != 0) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Gagal Login'))
-                  );
-                  // print(loginResponse.errCode);
-                  } else {
-                    Navigator.pushNamed(context, PageRoutes.signupRoute);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Berhasil Login'))
-                    );
-                  }
-                }
-              );
+              _login();
             }),
 
             const SizedBox(
