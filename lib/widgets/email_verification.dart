@@ -17,7 +17,7 @@ Map<String, dynamic> emaildata = {"email" : null};
 
 class _EmailVerificationSheetState extends State<EmailVerificationSheet> {
 
-  EmailVerResponse emailVerResponse = EmailVerResponse();
+  EmailVerResponse _emailVerResponse = EmailVerResponse();
 
   @override
   Widget build(BuildContext context) {
@@ -131,15 +131,15 @@ class _EmailVerificationSheetState extends State<EmailVerificationSheet> {
         ApiService.emailVer(email).then(
           (value) {
             setState(() {
-              emailVerResponse = value;
+              _emailVerResponse = value;
             });
-            if (emailVerResponse.errCode != 0) {
+            if (_emailVerResponse.errCode != 0) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Gagal Kirim'))
               );
             } else {
               Navigator.pop(context);
-              Navigator.pushNamed(context, PageRoutes.codeVerificationRoute, arguments: emailVerResponse);
+              Navigator.pushNamed(context, PageRoutes.codeVerificationRoute, arguments: _emailVerResponse);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Kode Berhasil Terkirim'))
               );
