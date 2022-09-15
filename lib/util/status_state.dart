@@ -4,5 +4,5 @@ enum Status {
   success,
   connected,
   failed,
-  loggedIn,
+  verified
 }
