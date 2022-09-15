@@ -2,8 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:presensifr/data/api/api_service.dart';
 import 'package:presensifr/data/model/response_model/email_ver_response_model.dart';
+import 'package:presensifr/provider/email_ver_provider.dart';
 import 'package:presensifr/screens/login_view.dart';
 import 'package:presensifr/widgets/code_verification.dart';
+import 'package:provider/provider.dart';
+
+import '../util/status_state.dart';
 
 class EmailVerificationSheet extends StatefulWidget {
   EmailVerificationSheet({Key? key}) : super(key: key);
@@ -16,8 +20,6 @@ final GlobalKey<FormState> _addPointKey = GlobalKey<FormState>();
 Map<String, dynamic> emaildata = {"email" : null};
 
 class _EmailVerificationSheetState extends State<EmailVerificationSheet> {
-
-  EmailVerResponse _emailVerResponse = EmailVerResponse();
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +105,28 @@ class _EmailVerificationSheetState extends State<EmailVerificationSheet> {
   }
 
   Widget _buildButton(BuildContext context) {
+
+    var emailVerificationProvider = Provider.of<EmailVerificationProvider>(context, listen: false);
+
+    Future<void> _emailVerify() async {
+
+      String email = emaildata.values.elementAt(0).toString();
+
+      await emailVerificationProvider.postEmailVerification(email);
+
+      if (emailVerificationProvider.status == Status.failed) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Gagal Kirim'))
+        );
+      } else if (emailVerificationProvider.status == Status.success) {
+        Navigator.pop(context);
+        Navigator.pushNamed(context, PageRoutes.codeVerificationRoute);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Kode Berhasil Terkirim'))
+        );
+      }
+    }
+
     return InkWell(
       child: Container(
         padding: const EdgeInsets.all(9.0),
@@ -125,27 +149,7 @@ class _EmailVerificationSheetState extends State<EmailVerificationSheet> {
         if (!_addPointKey.currentState!.validate()) {
           return;
         }
-
-        String email = emaildata.values.elementAt(0).toString();
-
-        ApiService.emailVer(email).then(
-          (value) {
-            setState(() {
-              _emailVerResponse = value;
-            });
-            if (_emailVerResponse.errCode != 0) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Gagal Kirim'))
-              );
-            } else {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, PageRoutes.codeVerificationRoute, arguments: _emailVerResponse);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Kode Berhasil Terkirim'))
-              );
-            }
-          }
-        );
+        _emailVerify();
       },
     );
   }

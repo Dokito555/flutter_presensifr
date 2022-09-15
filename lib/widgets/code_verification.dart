@@ -3,6 +3,9 @@ import 'package:presensifr/constants/constants.dart';
 import 'package:presensifr/data/api/api_service.dart';
 import 'package:presensifr/data/model/response_model/code_ver_response_model.dart';
 import 'package:presensifr/data/model/response_model/email_ver_response_model.dart';
+import 'package:presensifr/provider/code_ver_provider.dart';
+import 'package:presensifr/util/status_state.dart';
+import 'package:provider/provider.dart';
 
 class CodeVerification extends StatefulWidget {
   CodeVerification({
@@ -15,12 +18,10 @@ class CodeVerification extends StatefulWidget {
 
 class _CodeVerificationState extends State<CodeVerification> {
 
-  CodeVerResponse _codeVerResponse = CodeVerResponse();
-
   @override
   Widget build(BuildContext context) {
 
-    final EmailVerResponse emailVerResponse = ModalRoute.of(context)!.settings.arguments as EmailVerResponse;
+    final EmailVerificationResult emailVerResponse = ModalRoute.of(context)!.settings.arguments as EmailVerificationResult;
 
     return Scaffold(
       body: SafeArea(
@@ -63,7 +64,28 @@ class _CodeVerificationState extends State<CodeVerification> {
     );
   }
 
-  Widget _codeVerification(BuildContext context, EmailVerResponse emailVerResponse) {
+  Widget _codeVerification(BuildContext context, EmailVerificationResult emailVerResponse) {
+
+    var codeVerificationProvider = Provider.of<CodeVerificationProvider>(context);
+
+    Future<void> _codeVerify(int code) async {
+
+      String email = emailVerResponse.data!.result.email;
+
+      await codeVerificationProvider.codeVerify(code, email);
+
+      if (codeVerificationProvider.status == Status.failed) {
+        Navigator.pushNamed(context, PageRoutes.loginRoute);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Gagal verifikasi mohon ulang kembali'))
+        );
+      } else if (codeVerificationProvider.status == Status.verified) {
+        Navigator.pushNamed(context, PageRoutes.newPasswordRoute);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Berhasil, Silahkan Memperbarui Password'))
+        );
+      }
+    }
 
     return Container(
       padding: const EdgeInsets.only(top: 100),
@@ -78,27 +100,7 @@ class _CodeVerificationState extends State<CodeVerification> {
               child: TextButton(
                 child: Text('${emailVerResponse.data!.result.code1}'),
                 onPressed: () async {
-
-                  ApiService.codeVer(
-                    emailVerResponse.data!.result.code1, 
-                    emailVerResponse.data!.result.email
-                  ).then((value) {
-
-                    setState(() {
-                      _codeVerResponse = value;
-                    });
-                    if (_codeVerResponse.errCode != 0) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Gagal Verifikasi'))
-                      );
-                    } else {
-                      Navigator.pushNamed(context, PageRoutes.newPasswordRoute, arguments: emailVerResponse);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Berhasil, Silahkan Memperbarui Password'))
-                      );
-                    }
-
-                  });
+                  _codeVerify(emailVerResponse.data!.result.code1);
                 },
               ),
             ),
@@ -114,27 +116,7 @@ class _CodeVerificationState extends State<CodeVerification> {
               child: TextButton(
                 child: Text('${emailVerResponse.data!.result.code2}'),
                 onPressed: () async {
-
-                  ApiService.codeVer(
-                    emailVerResponse.data!.result.code2, 
-                    emailVerResponse.data!.result.email
-                  ).then((value) {
-
-                    setState(() {
-                      _codeVerResponse = value;
-                    });
-                    if (_codeVerResponse.errCode != 0) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Gagal Verifikasi'))
-                      );
-                    } else {
-                      Navigator.pushNamed(context, PageRoutes.newPasswordRoute, arguments: emailVerResponse);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Berhasil, Silahkan Memperbarui Password'))
-                      );
-                    }
-
-                  });
+                  _codeVerify(emailVerResponse.data!.result.code2);
                 },
               ),
             ),
@@ -150,27 +132,7 @@ class _CodeVerificationState extends State<CodeVerification> {
               child: TextButton(
                 child: Text('${emailVerResponse.data!.result.code3}'),
                 onPressed: () async {
-
-                  ApiService.codeVer(
-                    emailVerResponse.data!.result.code3, 
-                    emailVerResponse.data!.result.email
-                  ).then((value) {
-
-                    setState(() {
-                      _codeVerResponse = value;
-                    });
-                    if (_codeVerResponse.errCode != 0) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Kode Yang Anda Pilih Salah Silahkan Coba Lagi'))
-                      );
-                    } else {
-                      Navigator.pushNamed(context, PageRoutes.newPasswordRoute, arguments: emailVerResponse);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Berhasil, Silahkan Memperbarui Password'))
-                      );
-                    }
-
-                  });
+                  _codeVerify(emailVerResponse.data!.result.code3);
                 },
               ),
             ),

@@ -3,6 +3,13 @@ import 'package:presensifr/constants/constants.dart';
 import 'package:presensifr/data/api/api_service.dart';
 import 'package:presensifr/data/model/response_model/email_ver_response_model.dart';
 import 'package:presensifr/data/model/response_model/new_pass_response.dart';
+import 'package:presensifr/provider/code_ver_provider.dart';
+import 'package:presensifr/provider/new_pass_provider.dart';
+import 'package:presensifr/util/status_state.dart';
+import 'package:presensifr/widgets/email_verification.dart';
+import 'package:provider/provider.dart';
+
+import '../provider/email_ver_provider.dart';
 
 class NewPasswordPage extends StatefulWidget {
   NewPasswordPage({
@@ -18,7 +25,7 @@ Map<String, dynamic> newPasswordData = {"password" : null};
 
 class _NewPasswordPageState extends State<NewPasswordPage> {
 
-  NewPasswordResponse _newPassResponse = NewPasswordResponse();
+  NewPasswordResult _newPassResponse = NewPasswordResult();
   bool _isPasswordHide = true;
 
   void _togglePasswordVisibility() {
@@ -29,8 +36,6 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    final EmailVerResponse emailVerResponse = ModalRoute.of(context)!.settings.arguments as EmailVerResponse;
 
     return Scaffold(
       body: SafeArea(
@@ -47,7 +52,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                     children: [
                       _closeIcon(context),
                       _passwordForm(),
-                      _buildButton(context, emailVerResponse)
+                      _buildButton(context)
                     ],
                   ),
                 )
@@ -124,7 +129,31 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
     );
   }
 
-  Widget _buildButton(BuildContext context, EmailVerResponse emailVerResponse) {
+  Widget _buildButton(BuildContext context) {
+
+    var newPasswordProvider = Provider.of<NewPasswordProvider>(context, listen: false);
+    var emailVerificationProvider = Provider.of<EmailVerificationProvider>(context, listen: false);
+
+    Future<void> _updatePassword() async {
+
+      String email = emailVerificationProvider.emailVerificationResult.data!.result.email;
+      String newPassword = newPasswordData.values.elementAt(0).toString();
+
+      await newPasswordProvider.postNewPassword(email, newPassword);
+
+      if (newPasswordProvider.status == Status.failed) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Gagal Memperbarui Password'))
+        );
+      } else if (newPasswordProvider.status == Status.success) {
+        Navigator.of(context).pushNamed(PageRoutes.loginRoute);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Password Berhasil Diperbarui'))
+        );
+      }
+
+    }
+    
    return InkWell(
       child: Container(
         padding: const EdgeInsets.all(9.0),
@@ -147,26 +176,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
         if (!_addPointKey.currentState!.validate()) {
           return;
         }
-
-        var newPassword = newPasswordData.values.elementAt(0).toString();
-
-        ApiService.updatePass(newPassword, emailVerResponse.data!.result.email).then(
-          (value) {
-            setState(() {
-              _newPassResponse = value;
-            });
-            if (_newPassResponse.errCode != 0) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Gagal Memperbarui Password, Mohon Diulang Kembali'))
-              );
-            } else {
-              Navigator.of(context).pushNamed(PageRoutes.loginRoute);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Password Berhasil Diperbarui'))
-              );
-            }
-          }
-        );
+        _updatePassword();
       },
     );
   }

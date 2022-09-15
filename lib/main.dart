@@ -5,7 +5,11 @@
 import 'package:flutter/material.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:presensifr/data/api/api_service.dart';
+import 'package:presensifr/provider/code_ver_provider.dart';
+import 'package:presensifr/provider/email_ver_provider.dart';
 import 'package:presensifr/provider/login_provider.dart';
+import 'package:presensifr/provider/new_pass_provider.dart';
+import 'package:presensifr/screens/home_view.dart';
 import 'package:presensifr/screens/login_view.dart';
 import 'package:presensifr/screens/signup_view.dart';
 import 'package:presensifr/widgets/code_verification.dart';
@@ -18,6 +22,15 @@ void main() {
     providers: [
       ChangeNotifierProvider(
         create: (_) => LoginProvider(apiService: ApiService()),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => EmailVerificationProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => CodeVerificationProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => NewPasswordProvider(),
       )
     ],
       child: const App(),
@@ -42,7 +55,8 @@ class App extends StatelessWidget {
         PageRoutes.loginRoute: (context) => LoginPage(),
         PageRoutes.signupRoute: (context) => SignupPage(),
         PageRoutes.codeVerificationRoute: (context) => CodeVerification(),
-        PageRoutes.newPasswordRoute: (context) => NewPasswordPage()
+        PageRoutes.newPasswordRoute: (context) => NewPasswordPage(),
+        PageRoutes.homeRoute: (context) => HomePage()
       },
     );
   }

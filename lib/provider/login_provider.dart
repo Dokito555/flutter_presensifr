@@ -16,12 +16,12 @@ class LoginProvider extends ChangeNotifier {
   });
   
   late Status _status;
-  late LoginResponse _loginResponse;
+  late LoginResult _loginResult;
   String _message = '';
 
   Status get status => _status;
   String get message => _message;
-  LoginResponse get loginResponse => _loginResponse;
+  LoginResult get loginResult => _loginResult;
 
   Future<dynamic> postLogin(LoginModel loginData) async {
     try {
@@ -33,12 +33,13 @@ class LoginProvider extends ChangeNotifier {
         notifyListeners();
         return _message = 'Failed to logged in';
       } else {
-        _status = Status.loggedIn;
+        _status = Status.success;
         notifyListeners();
-        return _loginResponse = response;
+        return _loginResult = response;
       }
     } catch (e) {
       _status = Status.error;
+      notifyListeners();
       return _message = 'Error --> $e';
     }
   }

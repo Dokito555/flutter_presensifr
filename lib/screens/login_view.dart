@@ -25,8 +25,6 @@ class LoginPage extends StatefulWidget {
 class _LoginFormState extends State<LoginPage> {
   bool _isHidePassword = true;
 
-  LoginResponse loginResponse = LoginResponse();
-
   void _togglePasswordVisibility() {
     setState(() {
       _isHidePassword = !_isHidePassword;
@@ -184,8 +182,8 @@ class _LoginFormState extends State<LoginPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Gagal Login'))
         );
-      } else if (loginProvider.status == Status.loggedIn) {
-        Navigator.pushNamed(context, PageRoutes.signupRoute);
+      } else if (loginProvider.status == Status.success) {
+        Navigator.pushNamed(context, PageRoutes.homeRoute);
         ScaffoldMessenger.of(context).showSnackBar(
            const SnackBar(content: Text('Berhasil Login'))
         );
