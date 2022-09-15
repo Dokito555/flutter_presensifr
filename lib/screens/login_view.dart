@@ -33,24 +33,26 @@ class _LoginFormState extends State<LoginPage> {
   Widget build(BuildContext context) {
     mContext = context;
     return Scaffold(
-      body: Container(
-        color: ColorPalette.primaryColor,
-        padding: const EdgeInsets.all(20.0),
-        child: Form(
-          key: _addPointKey,
-          child: ListView(
-            children: [
-              Center(
-                child: Column(
-                  children: [
-                    _iconLogin(),
-                    _titleDescription(),
-                    _formLogin(),
-                    _buildButton(context)
-                  ],
-                ),
-              )
-            ],
+      body: SafeArea(
+        child: Container(
+          color: ColorPalette.primaryColor,
+          padding: const EdgeInsets.all(20.0),
+          child: Form(
+            key: _addPointKey,
+            child: ListView(
+              children: [
+                Center(
+                  child: Column(
+                    children: [
+                      _iconLogin(),
+                      _titleDescription(),
+                      _formLogin(),
+                      _buildButton(context)
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

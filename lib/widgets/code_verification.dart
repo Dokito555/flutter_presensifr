@@ -23,22 +23,24 @@ class _CodeVerificationState extends State<CodeVerification> {
     final EmailVerResponse emailVerResponse = ModalRoute.of(context)!.settings.arguments as EmailVerResponse;
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-        color: ColorPalette.secondaryColor
+      body: SafeArea(
+        child: Container(
+          decoration: const BoxDecoration(
+          color: ColorPalette.secondaryColor
+          ),
+          child: ListView(
+            children: [
+              Center(
+                child: Column(
+                  children: [
+                    _closeIcon(context),
+                    _codeVerification(context, emailVerResponse),
+                  ],
+                ),
+              )
+            ],
+          )
         ),
-        child: ListView(
-          children: [
-            Center(
-              child: Column(
-                children: [
-                  _closeIcon(context),
-                  _codeVerification(context, emailVerResponse),
-                ],
-              ),
-            )
-          ],
-        )
       )
     );
   }

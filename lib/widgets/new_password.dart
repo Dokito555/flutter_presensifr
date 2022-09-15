@@ -33,24 +33,26 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
     final EmailVerResponse emailVerResponse = ModalRoute.of(context)!.settings.arguments as EmailVerResponse;
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          color: ColorPalette.secondaryColor
-        ),
-        child: Form(
-          key: _addPointKey,
-          child: ListView(
-            children: [
-              Center(
-                child: Column(
-                  children: [
-                    _closeIcon(context),
-                    _passwordForm(),
-                    _buildButton(context, emailVerResponse)
-                  ],
-                ),
-              )
-            ],
+      body: SafeArea(
+        child: Container(
+          decoration: const BoxDecoration(
+            color: ColorPalette.secondaryColor
+          ),
+          child: Form(
+            key: _addPointKey,
+            child: ListView(
+              children: [
+                Center(
+                  child: Column(
+                    children: [
+                      _closeIcon(context),
+                      _passwordForm(),
+                      _buildButton(context, emailVerResponse)
+                    ],
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
