@@ -4,8 +4,8 @@
 
 import 'dart:convert';
 
-class LoginResponse {
-    LoginResponse({
+class ProfileResponse {
+    ProfileResponse({
         required this.errCode,
         required this.data,
     });
@@ -13,11 +13,11 @@ class LoginResponse {
     int errCode;
     Data data;
 
-    factory LoginResponse.fromRawJson(String str) => LoginResponse.fromJson(json.decode(str));
+    factory ProfileResponse.fromRawJson(String str) => ProfileResponse.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
+    factory ProfileResponse.fromJson(Map<String, dynamic> json) => ProfileResponse(
         errCode: json["err_code"],
         data: Data.fromJson(json["data"]),
     );
