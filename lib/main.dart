@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:presensifr/screens/login_view.dart';
 import 'package:presensifr/screens/signup_view.dart';
+import 'package:presensifr/widgets/code_verification.dart';
+import 'package:presensifr/widgets/new_password.dart';
 
 void main() {
   runApp(const App());
@@ -24,6 +26,8 @@ class App extends StatelessWidget {
       routes: {
         PageRoutes.loginRoute: (context) => LoginPage(),
         PageRoutes.signupRoute: (context) => SignupPage(),
+        PageRoutes.codeVerificationRoute: (context) => CodeVerification(),
+        PageRoutes.newPasswordRoute: (context) => NewPasswordPage()
       },
     );
   }

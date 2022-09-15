@@ -6,7 +6,9 @@ import 'package:presensifr/data/model/response_model/code_ver_response_model.dar
 import 'package:presensifr/data/model/response_model/email_ver_response_model.dart';
 import 'package:presensifr/data/model/response_model/login_response_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:presensifr/data/model/response_model/new_pass_response.dart';
 import 'package:presensifr/server.dart';
+import 'package:presensifr/widgets/new_password.dart';
 
 class ApiService {
 
@@ -52,7 +54,7 @@ class ApiService {
     } catch(e) {
       log(e.toString());
     }
-    
+
   }
 
   static Future<EmailVerResponse> emailVer(String email) async {
@@ -95,9 +97,9 @@ class ApiService {
       })
     );
 
-    print('Response req : ${response.request}');
-    print('Response status : ${response.statusCode}');
-    print('Response body : ${response.body}');
+    // print('Response req : ${response.request}');
+    // print('Response status : ${response.statusCode}');
+    // print('Response body : ${response.body}');
 
     final data = json.decode(response.body);
 
@@ -107,6 +109,33 @@ class ApiService {
       throw Exception('Code Verification Failed');
     }
     
+  }
+
+  static Future<NewPasswordResponse> updatePass(String newpass, String email) async {
+
+    final url = Uri.parse(APIServer.urlResetPassword);
+    const tenant = "grit";
+
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json'
+      },
+      body: jsonEncode(<String, String>{
+        "email" : email,
+        "password" : newpass,
+        "tenant" : tenant
+      }) 
+    );
+
+    final data = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      return NewPasswordResponse.fromJson(data);
+    } else {
+      throw Exception('Updating New Password Failed');
+    }
+
   }
 
 }
