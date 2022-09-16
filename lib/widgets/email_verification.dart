@@ -112,7 +112,7 @@ class _EmailVerificationSheetState extends State<EmailVerificationSheet> {
 
       String email = emaildata.values.elementAt(0).toString();
 
-      await emailVerificationProvider.postEmailVerification(email);
+      await emailVerificationProvider.postEmailVerification(email, false);
 
       if (emailVerificationProvider.status == Status.failed) {
         ScaffoldMessenger.of(context).showSnackBar(

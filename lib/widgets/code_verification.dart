@@ -4,6 +4,7 @@ import 'package:presensifr/data/api/api_service.dart';
 import 'package:presensifr/data/model/response_model/code_ver_response_model.dart';
 import 'package:presensifr/data/model/response_model/email_ver_response_model.dart';
 import 'package:presensifr/provider/code_ver_provider.dart';
+import 'package:presensifr/provider/email_ver_provider.dart';
 import 'package:presensifr/util/status_state.dart';
 import 'package:provider/provider.dart';
 
@@ -21,8 +22,6 @@ class _CodeVerificationState extends State<CodeVerification> {
   @override
   Widget build(BuildContext context) {
 
-    final EmailVerificationResult emailVerResponse = ModalRoute.of(context)!.settings.arguments as EmailVerificationResult;
-
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -35,7 +34,7 @@ class _CodeVerificationState extends State<CodeVerification> {
                 child: Column(
                   children: [
                     _closeIcon(context),
-                    _codeVerification(context, emailVerResponse),
+                    _codeVerification(context),
                   ],
                 ),
               )
@@ -64,13 +63,17 @@ class _CodeVerificationState extends State<CodeVerification> {
     );
   }
 
-  Widget _codeVerification(BuildContext context, EmailVerificationResult emailVerResponse) {
+  Widget _codeVerification(BuildContext context) {
 
     var codeVerificationProvider = Provider.of<CodeVerificationProvider>(context);
+    var emailVerificationProvider = Provider.of<EmailVerificationProvider>(context);
+    final code1 = emailVerificationProvider.emailVerificationResult.data!.result.code1;
+    final code2 = emailVerificationProvider.emailVerificationResult.data!.result.code2;
+    final code3 = emailVerificationProvider.emailVerificationResult.data!.result.code3;
 
     Future<void> _codeVerify(int code) async {
 
-      String email = emailVerResponse.data!.result.email;
+      final email = emailVerificationProvider.emailVerificationResult.data!.result.email;
 
       await codeVerificationProvider.codeVerify(code, email);
 
@@ -98,9 +101,9 @@ class _CodeVerificationState extends State<CodeVerification> {
             decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(10))),
             child: Center(
               child: TextButton(
-                child: Text('${emailVerResponse.data!.result.code1}'),
+                child: Text('${code1}'),
                 onPressed: () async {
-                  _codeVerify(emailVerResponse.data!.result.code1);
+                  _codeVerify(code1);
                 },
               ),
             ),
@@ -114,9 +117,9 @@ class _CodeVerificationState extends State<CodeVerification> {
             decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(10))),
             child: Center(
               child: TextButton(
-                child: Text('${emailVerResponse.data!.result.code2}'),
+                child: Text('${code2}'),
                 onPressed: () async {
-                  _codeVerify(emailVerResponse.data!.result.code2);
+                  _codeVerify(code2);
                 },
               ),
             ),
@@ -130,9 +133,9 @@ class _CodeVerificationState extends State<CodeVerification> {
             decoration: const BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(10))),
             child: Center(
               child: TextButton(
-                child: Text('${emailVerResponse.data!.result.code3}'),
+                child: Text('${code3}'),
                 onPressed: () async {
-                  _codeVerify(emailVerResponse.data!.result.code3);
+                  _codeVerify(code3);
                 },
               ),
             ),
