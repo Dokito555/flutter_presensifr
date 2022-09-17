@@ -4,8 +4,8 @@
 
 import 'dart:convert';
 
-class NewPasswordResponse {
-    NewPasswordResponse({
+class NewPasswordResult {
+    NewPasswordResult({
         this.errCode,
         this.data,
     });
@@ -13,11 +13,11 @@ class NewPasswordResponse {
     int? errCode;
     Data? data;
 
-    factory NewPasswordResponse.fromRawJson(String str) => NewPasswordResponse.fromJson(json.decode(str));
+    factory NewPasswordResult.fromRawJson(String str) => NewPasswordResult.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory NewPasswordResponse.fromJson(Map<String, dynamic> json) => NewPasswordResponse(
+    factory NewPasswordResult.fromJson(Map<String, dynamic> json) => NewPasswordResult(
         errCode: json["err_code"],
         data: Data.fromJson(json["data"]),
     );

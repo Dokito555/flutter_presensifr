@@ -9,13 +9,16 @@ import 'package:presensifr/data/model/response_model/login_response_model.dart';
 import 'package:presensifr/provider/login_provider.dart';
 import 'package:presensifr/server.dart';
 import 'package:presensifr/util/status_state.dart';
+import 'package:presensifr/widgets/title_description.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/email_verification.dart';
 
 final GlobalKey<FormState> _addPointKey = GlobalKey<FormState>();
-Map<String, dynamic> formData = {"email": null, "password": null};
-var mContext;
+Map<String, dynamic> formData = {
+  "email": null,
+  "password": null
+};
 
 class LoginPage extends StatefulWidget {
   @override
@@ -23,11 +26,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginPage> {
-  bool _isHidePassword = true;
+  bool _isPasswordHide = true;
 
   void _togglePasswordVisibility() {
     setState(() {
-      _isHidePassword = !_isHidePassword;
+      _isPasswordHide = !_isPasswordHide;
     });
   }
 
@@ -47,7 +50,10 @@ class _LoginFormState extends State<LoginPage> {
                   child: Column(
                     children: [
                       _iconLogin(),
-                      _titleDescription(),
+                      TitleDescription(
+                        title: "Login to PresensiFR", 
+                        subTitle: "Gunakan Username dan Password yang sudah terdaftar"
+                      ),
                       _formLogin(),
                       _buildButton(context)
                     ],
@@ -66,25 +72,6 @@ class _LoginFormState extends State<LoginPage> {
       "assets/images/icon_login.png",
       width: 150.0,
       height: 150.0,
-    );
-  }
-
-  Widget _titleDescription() {
-    return Column(
-      children: const [
-        Padding(padding: EdgeInsets.only(top: 16.0)),
-        Text(
-          "Login to PresensiFR",
-          style: TextStyle(
-              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.bold),
-        ),
-        Padding(padding: EdgeInsets.only(top: 12.0)),
-        Text(
-          "Gunakan Username dan Password yang sudah terdaftar",
-          style: TextStyle(color: Colors.white, fontSize: 12.0),
-          textAlign: TextAlign.center,
-        )
-      ],
     );
   }
 
@@ -138,11 +125,11 @@ class _LoginFormState extends State<LoginPage> {
                 _togglePasswordVisibility();
               },
               child: Icon(
-                  _isHidePassword ? Icons.visibility_off : Icons.visibility),
+                  _isPasswordHide ? Icons.visibility_off : Icons.visibility),
             ),
           ),
           style: const TextStyle(color: Colors.white),
-          obscureText: _isHidePassword,
+          obscureText: _isPasswordHide,
           autofocus: false,
           keyboardType: TextInputType.visiblePassword,
           validator: (value) {

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-class EmailVerResponse {
-    EmailVerResponse({
+class EmailVerificationResult {
+    EmailVerificationResult({
         this.errCode,
         this.data,
     });
@@ -9,11 +9,11 @@ class EmailVerResponse {
     int? errCode;
     Data? data;
 
-    factory EmailVerResponse.fromRawJson(String str) => EmailVerResponse.fromJson(json.decode(str));
+    factory EmailVerificationResult.fromRawJson(String str) => EmailVerificationResult.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory EmailVerResponse.fromJson(Map<String, dynamic> json) => EmailVerResponse(
+    factory EmailVerificationResult.fromJson(Map<String, dynamic> json) => EmailVerificationResult(
         errCode: json["err_code"],
         data: Data.fromJson(json["data"]),
     );

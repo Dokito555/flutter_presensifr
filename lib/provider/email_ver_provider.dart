@@ -14,11 +14,11 @@ class EmailVerificationProvider extends ChangeNotifier {
   EmailVerificationResult get emailVerificationResult => _emailVerificationResult;
   String get message => _message;
 
-  Future<dynamic> postEmailVerification(String email) async {
+  Future<dynamic> postEmailVerification(String email, bool newEmail) async {
     try {
       _status = Status.loading;
       notifyListeners();
-      final response = await ApiService.emailVerification(email);
+      final response = await ApiService.emailVerification(email, newEmail);
       if (response.errCode != 0) {
         _status = Status.failed;
         notifyListeners();
@@ -29,7 +29,7 @@ class EmailVerificationProvider extends ChangeNotifier {
         return _emailVerificationResult = response;
       }
     } catch(e) {
-      _status = Status.failed;
+      _status = Status.error;
       notifyListeners();
       return _message = 'Error --> $e';
     }

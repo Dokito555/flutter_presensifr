@@ -3,9 +3,9 @@ import 'package:http/http.dart' as http;
 import 'package:presensifr/server.dart';
 
 
-class LoginResponse {
+class LoginResult {
 
-    LoginResponse({
+    LoginResult({
       this.errCode,
       this.data,
     });
@@ -13,11 +13,11 @@ class LoginResponse {
     int? errCode;
     Data? data;
 
-    factory LoginResponse.fromRawJson(String str) => LoginResponse.fromJson(json.decode(str));
+    factory LoginResult.fromRawJson(String str) => LoginResult.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory LoginResponse.fromJson(Map<String, dynamic> json) => LoginResponse(
+    factory LoginResult.fromJson(Map<String, dynamic> json) => LoginResult(
         errCode: json["err_code"],
         data: Data.fromJson(json["data"]),
     );

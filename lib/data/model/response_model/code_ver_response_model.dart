@@ -4,8 +4,8 @@
 
 import 'dart:convert';
 
-class CodeVerResponse {
-    CodeVerResponse({
+class CodeVerificationResult {
+    CodeVerificationResult({
         this.errCode,
         this.data,
     });
@@ -13,11 +13,11 @@ class CodeVerResponse {
     int? errCode;
     Data? data;
 
-    factory CodeVerResponse.fromRawJson(String str) => CodeVerResponse.fromJson(json.decode(str));
+    factory CodeVerificationResult.fromRawJson(String str) => CodeVerificationResult.fromJson(json.decode(str));
 
     String toRawJson() => json.encode(toJson());
 
-    factory CodeVerResponse.fromJson(Map<String, dynamic> json) => CodeVerResponse(
+    factory CodeVerificationResult.fromJson(Map<String, dynamic> json) => CodeVerificationResult(
         errCode: json["err_code"],
         data: Data.fromJson(json["data"]),
     );

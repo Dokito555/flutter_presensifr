@@ -12,7 +12,7 @@ import 'package:presensifr/widgets/new_password.dart';
 
 class ApiService {
 
-  static Future<LoginResponse> connectLogin(LoginModel loginData) async {
+  static Future<LoginResult> connectLogin(LoginModel loginData) async {
 
     const tenant = "grit";
     final url = Uri.parse(APIServer.urlLogin);
@@ -28,35 +28,15 @@ class ApiService {
     final data = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      return LoginResponse.fromJson(data);
+      return LoginResult.fromJson(data);
     } else {
       throw Exception('Failed to login');
     }
   }
 
-  // static Future<http.Response?> login(LoginModel loginData) async {
-
-  //   final url = Uri.parse(APIServer.urlLogin);
-
-  //   http.Response? response;
-  //   try {
-  //     response = await http.post(
-  //       url,
-  //       headers: <String, String>{
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: jsonEncode(loginData.toJson())
-  //     );
-  //   } catch(e) {
-  //     log(e.toString());
-  //   }
-
-  // }
-
-  static Future<EmailVerResponse> emailVer(String email) async {
+  static Future<EmailVerificationResult> emailVerification(String email, bool newEmail) async {
     
     const tenant = "grit";
-    const newEmail = false;
     final url = Uri.parse(APIServer.urlEmailVerification);
     final response = await http.post(
       url,
@@ -73,13 +53,13 @@ class ApiService {
     final data = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      return EmailVerResponse.fromJson(data);
+      return EmailVerificationResult.fromJson(data);
     } else {
       throw Exception('Email Verification Failed');
     }
   }
 
-  static Future<CodeVerResponse> codeVer(int code, String email) async {
+  static Future<CodeVerificationResult> codeVerification(int code, String email) async {
 
     final url = Uri.parse(APIServer.urlCodeVerification);
     final response = await http.post(
@@ -93,21 +73,17 @@ class ApiService {
       })
     );
 
-    // print('Response req : ${response.request}');
-    // print('Response status : ${response.statusCode}');
-    // print('Response body : ${response.body}');
-
     final data = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      return CodeVerResponse.fromJson(data);
+      return CodeVerificationResult.fromJson(data);
     } else {
       throw Exception('Code Verification Failed');
     }
     
   }
 
-  static Future<NewPasswordResponse> updatePass(String newpass, String email) async {
+  static Future<NewPasswordResult> updatePassword(String newpass, String email) async {
 
     final url = Uri.parse(APIServer.urlResetPassword);
     const tenant = "grit";
@@ -127,7 +103,7 @@ class ApiService {
     final data = json.decode(response.body);
 
     if (response.statusCode == 200) {
-      return NewPasswordResponse.fromJson(data);
+      return NewPasswordResult.fromJson(data);
     } else {
       throw Exception('Updating New Password Failed');
     }

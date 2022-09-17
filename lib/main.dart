@@ -21,7 +21,7 @@ void main() {
     MultiProvider(
     providers: [
       ChangeNotifierProvider(
-        create: (_) => LoginProvider(apiService: ApiService()),
+        create: (_) => LoginProvider(),
       ),
       ChangeNotifierProvider(
         create: (_) => EmailVerificationProvider(),
