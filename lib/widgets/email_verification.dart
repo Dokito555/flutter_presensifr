@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:presensifr/data/api/api_service.dart';
 import 'package:presensifr/data/model/response_model/email_ver_response_model.dart';
@@ -115,14 +116,30 @@ class _EmailVerificationSheetState extends State<EmailVerificationSheet> {
       await emailVerificationProvider.postEmailVerification(email, false);
 
       if (emailVerificationProvider.status == Status.failed) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Gagal Kirim'))
+        // ScaffoldMessenger.of(context).showSnackBar(
+        //   const SnackBar(content: Text('Gagal Kirim'))
+        // );
+        Fluttertoast.showToast(
+          msg: 'Gagal Kirim',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1
         );
       } else if (emailVerificationProvider.status == Status.success) {
         Navigator.pop(context);
         Navigator.pushNamed(context, PageRoutes.codeVerificationRoute);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Kode Berhasil Terkirim'))
+        Fluttertoast.showToast(
+          msg: 'Kode Berhasil Terkirim',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Ada kesalahan mohon ulang kembali',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1
         );
       }
     }

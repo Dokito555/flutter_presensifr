@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:presensifr/data/api/api_service.dart';
@@ -166,85 +167,98 @@ class _LoginFormState extends State<LoginPage> {
       await loginProvider.postLogin(loginData);
 
       if (loginProvider.status == Status.failed) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Gagal Login'))
+        Fluttertoast.showToast(
+          msg: 'Gagal Login',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1
         );
       } else if (loginProvider.status == Status.success) {
         Navigator.pushNamed(context, PageRoutes.homeRoute);
-        ScaffoldMessenger.of(context).showSnackBar(
-           const SnackBar(content: Text('Berhasil Login'))
+        Fluttertoast.showToast(
+          msg: 'Berhasil Login',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Ada kesalahan mohon ulang kembali',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1
         );
       }
-
     }
 
     return Column(
       children: [
         const Padding(padding: EdgeInsets.only(top: 40.0)),
-        InkWell(
-          child: Container(
-            padding: const EdgeInsets.all(9.0),
-            width: double.infinity,
-            child: const Text(
-              "Login",
-              style: TextStyle(color: ColorPalette.primaryColor),
-              textAlign: TextAlign.center,
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(30.0)),
-            ),
-            onTap: () async {
-              if (!_addPointKey.currentState!.validate()) {
-                return;
+          InkWell(
+            child: Container(
+              padding: const EdgeInsets.all(9.0),
+              width: double.infinity,
+              child: const Text(
+                "Login",
+                style: TextStyle(color: ColorPalette.primaryColor),
+                textAlign: TextAlign.center,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(30.0)),
+              ),
+              onTap: () async {
+                if (!_addPointKey.currentState!.validate()) {
+                  return;
+                }
+                _login();
               }
-              _login();
-            }),
+            ),
 
             const SizedBox(
               height: 24,
             ),
 
-            InkWell(
-              child: Container(
-                padding: const EdgeInsets.all(9.0),
-                width: double.infinity,
-                child: const Text(
-                  'Sign Up',
-                  style: TextStyle(color: ColorPalette.primaryColor),
-                  textAlign: TextAlign.center,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
+          InkWell(
+            child: Container(
+              padding: const EdgeInsets.all(9.0),
+              width: double.infinity,
+              child: const Text(
+                'Sign Up',
+                style: TextStyle(color: ColorPalette.primaryColor),
+                textAlign: TextAlign.center,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.white,
                   borderRadius: BorderRadius.circular(30.0)
                 ),
               ),
-              onTap: () {
-                Navigator.pushNamed(context, PageRoutes.signupRoute);
-              },
-            ),
+            onTap: () {
+              Navigator.pushNamed(context, PageRoutes.signupRoute);
+            },
+          ),
 
-            const SizedBox(
-              height: 20,
-            ),
+          const SizedBox(
+            height: 20,
+          ),
 
-            TextButton(
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 8.0),
-                width: double.infinity,
-                child: const Text(
-                  'Forgot Password?',
-                  style: TextStyle(color: ColorPalette.whiteColor),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              onPressed: () => {
-                showModalBottomSheet(
-                  context: context, 
-                  builder: (context) => EmailVerificationSheet()
-                )
-              },
-            )
+          TextButton(
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              width: double.infinity,
+              child: const Text(
+                'Forgot Password?',
+              style: TextStyle(color: ColorPalette.whiteColor),
+              textAlign: TextAlign.center,
+            ),
+          ),
+            onPressed: () => {
+              showModalBottomSheet(
+                context: context, 
+                builder: (context) => EmailVerificationSheet()
+              )
+           },
+          )
       ],
     );
   }

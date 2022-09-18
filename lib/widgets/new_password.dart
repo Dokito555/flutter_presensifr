@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:presensifr/data/api/api_service.dart';
 import 'package:presensifr/data/model/response_model/email_ver_response_model.dart';
@@ -142,16 +143,28 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
       await newPasswordProvider.postNewPassword(email, newPassword);
 
       if (newPasswordProvider.status == Status.failed) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Gagal Memperbarui Password'))
+        Fluttertoast.showToast(
+          msg: 'Gagal Memperbarui Password',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1
         );
       } else if (newPasswordProvider.status == Status.success) {
         Navigator.of(context).pushNamed(PageRoutes.loginRoute);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Password Berhasil Diperbarui'))
+        Fluttertoast.showToast(
+          msg: 'Password Berhasil Diperbarui',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Ada kesalahan mohon ulang kembali',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1
         );
       }
-
     }
     
    return InkWell(

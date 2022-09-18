@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:presensifr/data/api/api_service.dart';
 import 'package:presensifr/data/model/response_model/code_ver_response_model.dart';
@@ -79,13 +80,26 @@ class _CodeVerificationState extends State<CodeVerification> {
 
       if (codeVerificationProvider.status == Status.failed) {
         Navigator.pushNamed(context, PageRoutes.loginRoute);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Gagal verifikasi mohon ulang kembali'))
+        Fluttertoast.showToast(
+          msg: 'Gagal verifikasi mohon ulang kembali',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1
         );
       } else if (codeVerificationProvider.status == Status.verified) {
         Navigator.pushNamed(context, PageRoutes.newPasswordRoute);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Berhasil, Silahkan Memperbarui Password'))
+        Fluttertoast.showToast(
+          msg: 'Berhasil, Silahkan Memperbarui Password',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: 'Ada kesalahan mohon ulang kembali',
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1
         );
       }
     }
