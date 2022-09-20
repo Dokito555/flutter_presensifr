@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:http/http.dart' as http;
@@ -39,10 +40,21 @@ class _LoginFormState extends State<LoginPage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: ColorPalette.primaryColor,
+        toolbarHeight: 10,
+        bottomOpacity: 0.0,
+        elevation: 0.0,
+        automaticallyImplyLeading: false,
+      ),
       body: SafeArea(
         child: Container(
           color: ColorPalette.primaryColor,
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.only(
+            left: 20,
+            right: 20,
+            bottom: 20
+          ),
           child: Form(
             key: _addPointKey,
             child: ListView(
@@ -111,7 +123,7 @@ class _LoginFormState extends State<LoginPage> {
         // Password
         TextFormField(
           decoration: InputDecoration(
-            border: UnderlineInputBorder(),
+            border: const UnderlineInputBorder(),
             enabledBorder: const UnderlineInputBorder(
                 borderSide: BorderSide(
                     color: ColorPalette.underlineTextField, width: 1.5)),
@@ -154,6 +166,18 @@ class _LoginFormState extends State<LoginPage> {
 
     var loginProvider = Provider.of<LoginProvider>(context, listen: false);
 
+    void _onLoading() {
+      showDialog(
+        context: context, 
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      );
+    }
+
     Future<void> _login() async {
 
       String email = formData.values.elementAt(0).toString();
@@ -164,8 +188,10 @@ class _LoginFormState extends State<LoginPage> {
         password: password
       );
 
-      await loginProvider.postLogin(loginData);
+      _onLoading();
 
+      await loginProvider.postLogin(loginData);
+      
       if (loginProvider.status == Status.failed) {
         Fluttertoast.showToast(
           msg: 'Gagal Login',
@@ -173,6 +199,7 @@ class _LoginFormState extends State<LoginPage> {
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1
         );
+        Navigator.pop(context);
       } else if (loginProvider.status == Status.success) {
         Navigator.pushNamed(context, PageRoutes.homeRoute);
         Fluttertoast.showToast(
@@ -188,6 +215,7 @@ class _LoginFormState extends State<LoginPage> {
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1
         );
+        Navigator.pop(context);
       }
     }
 

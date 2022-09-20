@@ -24,10 +24,16 @@ class _CodeVerificationState extends State<CodeVerification> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: ColorPalette.primaryColor,
+        toolbarHeight: 10,
+        bottomOpacity: 0.0,
+        elevation: 0.0,
+      ),
       body: SafeArea(
         child: Container(
           decoration: const BoxDecoration(
-          color: ColorPalette.secondaryColor
+          color: ColorPalette.primaryColor
           ),
           child: ListView(
             children: [
@@ -72,11 +78,25 @@ class _CodeVerificationState extends State<CodeVerification> {
     final code2 = emailVerificationProvider.emailVerificationResult.data!.result.code2;
     final code3 = emailVerificationProvider.emailVerificationResult.data!.result.code3;
 
+    void _onLoading() {
+      showDialog(
+        context: context, 
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      );
+    }
+
     Future<void> _codeVerify(int code) async {
 
       final email = emailVerificationProvider.emailVerificationResult.data!.result.email;
 
       await codeVerificationProvider.codeVerify(code, email);
+
+      _onLoading();
 
       if (codeVerificationProvider.status == Status.failed) {
         Navigator.pushNamed(context, PageRoutes.loginRoute);
@@ -105,9 +125,9 @@ class _CodeVerificationState extends State<CodeVerification> {
     }
 
     return Container(
-      padding: const EdgeInsets.only(top: 100),
+      padding: const EdgeInsets.only(top: 50),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Container(
             height: 100,
@@ -122,9 +142,6 @@ class _CodeVerificationState extends State<CodeVerification> {
               ),
             ),
           ),
-          const SizedBox(
-            width: 30,
-          ),
           Container(
             height: 100,
             width: 100,
@@ -137,9 +154,6 @@ class _CodeVerificationState extends State<CodeVerification> {
                 },
               ),
             ),
-          ),
-          const SizedBox(
-            width: 30,
           ),
           Container(
             height: 100,

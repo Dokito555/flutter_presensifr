@@ -39,10 +39,16 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: ColorPalette.primaryColor,
+        toolbarHeight: 10,
+        bottomOpacity: 0.0,
+        elevation: 0.0,
+      ),
       body: SafeArea(
         child: Container(
           decoration: const BoxDecoration(
-            color: ColorPalette.secondaryColor
+            color: ColorPalette.primaryColor
           ),
           child: Form(
             key: _addPointKey,
@@ -92,18 +98,18 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
           border: const UnderlineInputBorder(),
           enabledBorder: const UnderlineInputBorder(
             borderSide: BorderSide(
-              color: ColorPalette.greyColor, width: 1.5
+              color: ColorPalette.underlineTextField, width: 1.5
             )
           ),
           focusedBorder: const UnderlineInputBorder(
             borderSide: BorderSide(
-              color: Colors.black, width: 1.0
+              color: Colors.white, width: 1.0
             )
           ),
           hintText: "Masukkan password yang baru",
           labelText: "New Password",
-          labelStyle: const TextStyle(color: Colors.black),
-          hintStyle: const TextStyle(color: ColorPalette.greyColor),
+          labelStyle: const TextStyle(color: Colors.white),
+          hintStyle: const TextStyle(color: ColorPalette.hintColor),
           suffixIcon: GestureDetector(
             onTap: () {
               _togglePasswordVisibility();
@@ -113,7 +119,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
             ),
           )
         ),
-        style: const TextStyle(color: Colors.black),
+        style: const TextStyle(color: Colors.white),
         obscureText: _isPasswordHide,
         autofocus: false,
         keyboardType: TextInputType.visiblePassword,
@@ -135,10 +141,24 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
     var newPasswordProvider = Provider.of<NewPasswordProvider>(context, listen: false);
     var emailVerificationProvider = Provider.of<EmailVerificationProvider>(context, listen: false);
 
+    void _onLoading() {
+      showDialog(
+        context: context, 
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      );
+    }
+
     Future<void> _updatePassword() async {
 
       String email = emailVerificationProvider.emailVerificationResult.data!.result.email;
       String newPassword = newPasswordData.values.elementAt(0).toString();
+
+      _onLoading();
 
       await newPasswordProvider.postNewPassword(email, newPassword);
 
@@ -176,12 +196,12 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
         child: const Center(
           child: Text(
             'Send Code',
-            style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500),
+            style: TextStyle(color: ColorPalette.primaryColor, fontSize: 14, fontWeight: FontWeight.w500),
             textAlign: TextAlign.center,
           ),
         ),
         decoration: BoxDecoration(
-          color: ColorPalette.primaryColor,
+          color: ColorPalette.whiteColor,
           borderRadius: BorderRadius.circular(10.0)
         ),
       ),
