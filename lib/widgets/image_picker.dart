@@ -18,22 +18,22 @@ class PickImage extends StatefulWidget {
 
 class _PickImageState extends State<PickImage> {
 
-  // File? image;
+  File? image;
 
   @override
   Widget build(BuildContext context) {
 
     var imagePickerProvider = Provider.of<ImagePickerProvider>(context);
-    var imageProvider = imagePickerProvider.image!;
+    var imageProvider = imagePickerProvider.image;
 
-    Future pickImage(ImageSource source, BuildContext context) async {
+    Future pickImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
       if (image == null) return;
       final imageTemporary = File(image.path);
-      // setState(() {
-      //   this.image = imageTemporary;
-      // });
+      setState(() {
+        this.image = imageTemporary;
+      });
       imageProvider = imageTemporary;
       Navigator.pop(context);
     } on PlatformException catch (e) {
@@ -41,18 +41,18 @@ class _PickImageState extends State<PickImage> {
     }
   }
 
-  Future<ImageSource?> showImageSource(BuildContext context) async {
+  Future<ImageSource?> showImageSource() async {
       return showCupertinoModalBottomSheet(
       context: context, 
       builder: (context) => CupertinoActionSheet(
         actions: [
           CupertinoActionSheetAction(
             child: const Text('Camera'),
-            onPressed: () => pickImage(ImageSource.camera, context)
+            onPressed: () => pickImage(ImageSource.camera)
           ),
           CupertinoActionSheetAction(
             child: const Text('Gallery'),
-            onPressed: () => pickImage(ImageSource.gallery, context)
+            onPressed: () => pickImage(ImageSource.gallery)
           )
         ],
       )
@@ -63,10 +63,10 @@ class _PickImageState extends State<PickImage> {
       children: [
         const Padding(padding: EdgeInsets.only(top: 20)),
         InkWell(
-          child: imageProvider != null
+          child: image != null
           ? ClipOval(
             child: Image.file(
-              imageProvider,
+              image!,
               height: 120,
               width: 120,
               fit: BoxFit.cover,
@@ -84,7 +84,7 @@ class _PickImageState extends State<PickImage> {
             height: 120,
           ),
           onTap: () {
-            showImageSource(context);
+            showImageSource();
           }
         ),
       ],
