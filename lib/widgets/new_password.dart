@@ -169,6 +169,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1
         );
+         Navigator.pop(context);
       } else if (newPasswordProvider.status == Status.success) {
         Navigator.of(context).pushNamed(PageRoutes.loginRoute);
         Fluttertoast.showToast(
@@ -184,6 +185,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1
         );
+         Navigator.pop(context);
       }
     }
     

@@ -121,6 +121,7 @@ class _CodeVerificationState extends State<CodeVerification> {
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1
         );
+        Navigator.pop(context);
       }
     }
 

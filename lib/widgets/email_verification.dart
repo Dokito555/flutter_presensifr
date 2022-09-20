@@ -109,9 +109,23 @@ class _EmailVerificationSheetState extends State<EmailVerificationSheet> {
 
     var emailVerificationProvider = Provider.of<EmailVerificationProvider>(context, listen: false);
 
+    void _onLoading() {
+      showDialog(
+        context: context, 
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      );
+    }
+
     Future<void> _emailVerify() async {
 
       String email = emaildata.values.elementAt(0).toString();
+
+      _onLoading();
 
       await emailVerificationProvider.postEmailVerification(email, false);
 
@@ -125,6 +139,7 @@ class _EmailVerificationSheetState extends State<EmailVerificationSheet> {
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1
         );
+         Navigator.pop(context);
       } else if (emailVerificationProvider.status == Status.success) {
         Navigator.pop(context);
         Navigator.pushNamed(context, PageRoutes.codeVerificationRoute);
@@ -141,6 +156,7 @@ class _EmailVerificationSheetState extends State<EmailVerificationSheet> {
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1
         );
+         Navigator.pop(context);
       }
     }
 
