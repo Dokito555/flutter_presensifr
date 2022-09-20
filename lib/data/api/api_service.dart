@@ -7,6 +7,7 @@ import 'package:presensifr/data/model/response_model/email_ver_response_model.da
 import 'package:presensifr/data/model/response_model/login_response_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:presensifr/data/model/response_model/new_pass_response.dart';
+import 'package:presensifr/data/model/response_model/profile_response_model.dart';
 import 'package:presensifr/server.dart';
 import 'package:presensifr/widgets/new_password.dart';
 
@@ -108,6 +109,32 @@ class ApiService {
       throw Exception('Updating New Password Failed');
     }
 
+  }
+
+  static Future<ProfileResult> getProfile(String nik, String nip) async {
+
+    final url = Uri.parse(APIServer.urlProfile);
+    const tenant = "grit";
+
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json'
+      },
+      body: jsonEncode(<String, String>{
+        "nik": nik,
+        "nip": nip,
+        "tenant": tenant
+      })
+    );
+
+    final data = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      return ProfileResult.fromJson(data);
+    } else {
+      throw Exception('Get Profil Failed');
+    }
   }
 
 }

@@ -1,6 +1,6 @@
 // To parse this JSON data, do
 //
-//     final loginResponse = loginResponseFromJson(jsonString);
+//     final profileResult = profileResultFromJson(jsonString);
 
 import 'dart:convert';
 
@@ -10,8 +10,8 @@ class ProfileResult {
         required this.data,
     });
 
-    int errCode;
-    Data data;
+    int? errCode;
+    Data? data;
 
     factory ProfileResult.fromRawJson(String str) => ProfileResult.fromJson(json.decode(str));
 
@@ -24,7 +24,7 @@ class ProfileResult {
 
     Map<String, dynamic> toJson() => {
         "err_code": errCode,
-        "data": data.toJson(),
+        "data": data!.toJson(),
     };
 }
 
@@ -81,7 +81,7 @@ class Result {
     int role;
     String lembaga;
     String image;
-    String token;
+    dynamic token;
     String status;
     DateTime updatedAt;
 
