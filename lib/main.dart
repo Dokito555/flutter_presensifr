@@ -9,6 +9,7 @@ import 'package:presensifr/provider/code_ver_provider.dart';
 import 'package:presensifr/provider/email_ver_provider.dart';
 import 'package:presensifr/provider/image_picker_provider.dart';
 import 'package:presensifr/provider/login_provider.dart';
+import 'package:presensifr/provider/logout_provider.dart';
 import 'package:presensifr/provider/new_pass_provider.dart';
 import 'package:presensifr/screens/home_view.dart';
 import 'package:presensifr/screens/login_view.dart';
@@ -35,6 +36,9 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (_) => ImagePickerProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => LogoutProvider(),
       )
     ],
       child: const App(),

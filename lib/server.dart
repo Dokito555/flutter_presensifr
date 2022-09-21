@@ -5,4 +5,6 @@ class APIServer {
   static const urlCodeVerification = urlAPI + 'code_verification';
   static const urlProfile = urlAPI + 'profile_pegawai';
   static const urlResetPassword = urlAPI + 'reset_password';
+  static const urlRegisterPegawai = urlAPI + 'register_pegawai';
+  static const urlLogout = urlAPI + 'logout_pegawai';
 }
