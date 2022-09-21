@@ -201,6 +201,7 @@ class _LoginFormState extends State<LoginPage> {
         );
         Navigator.pop(context);
       } else if (loginProvider.status == Status.success) {
+        Navigator.pop(context);
         Navigator.pushNamed(context, PageRoutes.homeRoute);
         Fluttertoast.showToast(
           msg: 'Berhasil Login',

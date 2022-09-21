@@ -22,7 +22,7 @@ class LoginProvider extends ChangeNotifier {
       if (response.errCode != 0) {
         _status = Status.failed;
         notifyListeners();
-        return _message = 'Failed to logged in';
+        return _message = 'Failed to login';
       } else {
         _status = Status.success;
         notifyListeners();
