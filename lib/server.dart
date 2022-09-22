@@ -7,4 +7,5 @@ class APIServer {
   static const urlResetPassword = urlAPI + 'reset_password';
   static const urlRegisterPegawai = urlAPI + 'register_pegawai';
   static const urlLogout = urlAPI + 'logout_pegawai';
+  static const urlHistory = urlAPI + 'history';
 }

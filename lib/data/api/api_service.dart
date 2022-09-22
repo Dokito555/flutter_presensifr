@@ -10,7 +10,8 @@ import 'package:presensifr/data/model/response_model/logout_response_model.dart'
 import 'package:presensifr/data/model/response_model/new_pass_response.dart';
 import 'package:presensifr/data/model/response_model/profile_response_model.dart';
 import 'package:presensifr/server.dart';
-import 'package:presensifr/widgets/new_password.dart';
+
+import '../model/response_model/history_response_model.dart';
 
 class ApiService {
 
@@ -135,6 +136,32 @@ class ApiService {
       return ProfileResult.fromJson(data);
     } else {
       throw Exception('Get Profil Failed');
+    }
+  }
+
+  static Future<HistoryResult> getHistory(String nik, String nip) async {
+
+    final url = Uri.parse(APIServer.urlHistory);
+    final tenant = "grit";
+
+    final response = await http.post(
+      url,
+      headers: <String, String> {
+        'Content-Type': 'application/json'
+      },
+      body: jsonEncode(<String, String> {
+        "nik": nik,
+        "nip": nip,
+        "tenant": tenant
+      })
+    );
+
+    final data = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      return HistoryResult.fromJson(data);
+    } else {
+      throw Exception('Get History Failed');
     }
   }
 

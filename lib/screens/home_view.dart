@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:presensifr/data/api/api_service.dart';
+import 'package:presensifr/provider/history_provider.dart';
 import 'package:presensifr/provider/login_provider.dart';
 import 'package:presensifr/provider/profile_provider.dart';
 import 'package:presensifr/screens/attendance_view.dart';
@@ -26,7 +27,13 @@ class _HomePageState extends State<HomePage> {
 
     final List<Widget> _navbarPages = [
       const AttendancePage(),
-      const HistoryPage(),
+      ChangeNotifierProvider<HistoryProvider>(
+        create: (_) => HistoryProvider(
+          nik: loginProvider.loginResult.data!.result.nik, 
+          nip: loginProvider.loginResult.data!.result.nip
+        ),
+        child: HistoryPage(),
+      ),
       ChangeNotifierProvider<ProfileProvider>(
         create: (_) => ProfileProvider(
           nik: loginProvider.loginResult.data!.result.nik, 
