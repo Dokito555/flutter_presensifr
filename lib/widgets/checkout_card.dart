@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:presensifr/data/model/response_model/history_response_model.dart';
 
-class CheckInCard extends StatelessWidget {
+class CheckOutCard extends StatelessWidget {
 
-  final CheckIn result;
+  final CheckOut result;
 
-  CheckInCard({
+  CheckOutCard({
     required this.result
   });
 
@@ -18,9 +18,9 @@ class CheckInCard extends StatelessWidget {
       width: 320,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: result.late! == "False" 
+        color: result.early! == "False" 
         ? ColorPalette.blueColor 
-        : result.late! == "Tolerance" 
+        : result.early! == "Tolerance" 
           ? ColorPalette.yellowColor 
         : ColorPalette.redColor
       ),
@@ -51,9 +51,9 @@ class CheckInCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        result.late! == "False" 
+                        result.early! == "False" 
                         ? "Tepat Waktu" 
-                        : result.late! == "Tolerance" 
+                        : result.early! == "Tolerance" 
                           ? "Tolerance" 
                         : "Terlambat",
                         style: const TextStyle(
