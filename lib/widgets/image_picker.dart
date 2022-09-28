@@ -75,7 +75,7 @@ class _PickImageState extends State<PickImage> {
           : Container(
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.grey,
+              color: ColorPalette.greyColor,
             ),
             child: const Center(
               child: Icon(Icons.photo_camera, color: Colors.white,),
