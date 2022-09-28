@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:presensifr/data/model/check_location_model.dart';
 import 'package:presensifr/data/model/login_model.dart';
+import 'package:presensifr/data/model/response_model/check_location_response.dart';
 import 'package:presensifr/data/model/response_model/code_ver_response_model.dart';
 import 'package:presensifr/data/model/response_model/email_ver_response_model.dart';
 import 'package:presensifr/data/model/response_model/login_response_model.dart';
@@ -18,7 +20,7 @@ class ApiService {
   static Future<LoginResult> connectLogin(LoginModel loginData) async {
 
     const tenant = "grit";
-    final url = Uri.parse(APIServer.urlLogin);
+    final url = Uri.parse(ApiServer.urlLogin);
 
     final response = await http.post(
       url,
@@ -40,7 +42,7 @@ class ApiService {
   static Future<EmailVerificationResult> emailVerification(String email, bool newEmail) async {
     
     const tenant = "grit";
-    final url = Uri.parse(APIServer.urlEmailVerification);
+    final url = Uri.parse(ApiServer.urlEmailVerification);
     final response = await http.post(
       url,
       headers: <String, String>{
@@ -64,7 +66,7 @@ class ApiService {
 
   static Future<CodeVerificationResult> codeVerification(int code, String email) async {
 
-    final url = Uri.parse(APIServer.urlCodeVerification);
+    final url = Uri.parse(ApiServer.urlCodeVerification);
     final response = await http.post(
       url,
       headers: <String, String>{
@@ -88,7 +90,7 @@ class ApiService {
 
   static Future<NewPasswordResult> updatePassword(String newpass, String email) async {
 
-    final url = Uri.parse(APIServer.urlResetPassword);
+    final url = Uri.parse(ApiServer.urlResetPassword);
     const tenant = "grit";
 
     final response = await http.post(
@@ -115,7 +117,7 @@ class ApiService {
 
   static Future<ProfileResult> getProfile(String nik, String nip) async {
 
-    final url = Uri.parse(APIServer.urlProfile);
+    final url = Uri.parse(ApiServer.urlProfile);
     const tenant = "grit";
 
     final response = await http.post(
@@ -141,7 +143,7 @@ class ApiService {
 
   static Future<HistoryResult> getHistory(String nik, String nip) async {
 
-    final url = Uri.parse(APIServer.urlHistory);
+    final url = Uri.parse(ApiServer.urlHistory);
     final tenant = "grit";
 
     final response = await http.post(
@@ -167,7 +169,7 @@ class ApiService {
 
   static Future<LogoutResult> logout(String nik, String nip) async {
 
-    final url = Uri.parse(APIServer.urlLogout);
+    final url = Uri.parse(ApiServer.urlLogout);
     const tenant = "grit";
 
     final response = await http.post(
@@ -190,5 +192,35 @@ class ApiService {
       throw Exception('Logout Failed');
     }
   }
+
+  static Future<CheckLocationResult> checkLocation(String lat, String long, String nik) async {
+
+    const tenant = "grit";
+    final url = Uri.parse(ApiServer.urlCheckLocation);
+
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json'
+      },
+      body: jsonEncode(<String, String>{
+        "latitude": lat,
+        "longitude": long,
+        "nik": nik,
+        "tenant": tenant
+      })
+    ); 
+
+    final data = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      return CheckLocationResult.fromJson(data);
+    } else {
+      throw Exception('Failed to check location');
+    }
+
+  }
+
+
 
 }

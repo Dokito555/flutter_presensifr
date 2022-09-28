@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constants/constants.dart';
+
 class AttendancePage extends StatefulWidget {
   const AttendancePage({Key? key}) : super(key: key);
 
@@ -42,21 +44,26 @@ class _AttendancePageState extends State<AttendancePage> {
               ),
             ),
             Card(
-              child: Container(
-                width: 100,
-                height: 100,
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        "assets/images/in.png",
-                        width: 40,
-                        height: 40,
-                      ),
-                      const SizedBox(height: 10),
-                      const Text('Masuk')
-                    ],
-                  ),
+              child: GestureDetector(
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "assets/images/in.png",
+                          width: 40,
+                          height: 40,
+                        ),
+                        const SizedBox(height: 10),
+                        const Text('Masuk')
+                      ],
+                    ),
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, PageRoutes.presenceRoute);
+                },
               ),
             ),
           ],

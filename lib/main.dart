@@ -5,12 +5,14 @@
 import 'package:flutter/material.dart';
 import 'package:presensifr/constants/constants.dart';
 import 'package:presensifr/data/api/api_service.dart';
+import 'package:presensifr/provider/check_location_provider.dart';
 import 'package:presensifr/provider/code_ver_provider.dart';
 import 'package:presensifr/provider/email_ver_provider.dart';
 import 'package:presensifr/provider/image_picker_provider.dart';
 import 'package:presensifr/provider/login_provider.dart';
 import 'package:presensifr/provider/logout_provider.dart';
 import 'package:presensifr/provider/new_pass_provider.dart';
+import 'package:presensifr/screens/attendance/presence_view.dart';
 import 'package:presensifr/screens/home_view.dart';
 import 'package:presensifr/screens/login_view.dart';
 import 'package:presensifr/screens/signup_view.dart';
@@ -39,6 +41,9 @@ void main() {
       ),
       ChangeNotifierProvider(
         create: (_) => LogoutProvider(),
+      ),
+      ChangeNotifierProvider(
+        create: (_) => CheckLocationProvider(),
       )
     ],
       child: const App(),
@@ -64,7 +69,8 @@ class App extends StatelessWidget {
         PageRoutes.signupRoute: (context) => SignupPage(),
         PageRoutes.codeVerificationRoute: (context) => CodeVerification(),
         PageRoutes.newPasswordRoute: (context) => NewPasswordPage(),
-        PageRoutes.homeRoute: (context) => HomePage()
+        PageRoutes.homeRoute: (context) => HomePage(),
+        PageRoutes.presenceRoute: (context) => PresencePage()
       },
     );
   }

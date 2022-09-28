@@ -1,4 +1,4 @@
-class APIServer {
+class ApiServer {
   static const urlAPI = 'http://103.140.90.10:9600/absensi/';
   static const urlLogin = urlAPI + 'login_pegawai';
   static const urlEmailVerification = urlAPI + 'email_verification';
@@ -8,4 +8,6 @@ class APIServer {
   static const urlRegisterPegawai = urlAPI + 'register_pegawai';
   static const urlLogout = urlAPI + 'logout_pegawai';
   static const urlHistory = urlAPI + 'history';
+  static const urlCheckLocation = urlAPI + 'check_location';
+  static const urlAbsensi = urlAPI + 'absensi';
 }

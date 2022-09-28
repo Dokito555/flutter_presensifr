@@ -7,10 +7,11 @@ class ColorPalette {
   static const underlineTextField = Color(0xff8b97ff);
   static const hintColor = Color(0xffccd1ff);
   static const whiteColor = Color(0xffffffff);
-  static const greyColor = Color(0xff353c45);
+  static const greyColor = Color(0xff9D9D9D);
   static const redColor = Color(0xffEA658A);
   static const yellowColor = Color(0xffEEA565);
   static const blueColor = Color(0xff83C1EF);
+  static const greenColor = Color(0xff35C759);
 }
 
 class PageRoutes {
@@ -21,4 +22,5 @@ class PageRoutes {
   static const homeRoute = '/home';
   static const historyRoute = '/history';
   static const profileRoute = '/profile';
+  static const presenceRoute = 'presence';
 }
